@@ -61,14 +61,14 @@ describe("IntentSchemaHardening", () => {
       ).toBe(true);
     });
 
-    it("rejects fractional troops", () => {
+    it("accepts fractional troops", () => {
       expect(
         AttackIntentSchema.safeParse({
           type: "attack",
           targetID: "abc12345",
           troops: 10.5,
         }).success,
-      ).toBe(false);
+      ).toBe(true);
     });
 
     it("rejects negative troops", () => {
@@ -100,14 +100,14 @@ describe("IntentSchemaHardening", () => {
       ).toBe(true);
     });
 
-    it("rejects fractional troops or dst", () => {
+    it("accepts fractional troops but rejects fractional dst", () => {
       expect(
         BoatAttackIntentSchema.safeParse({
           type: "boat",
           troops: 50.1,
           dst: 100,
         }).success,
-      ).toBe(false);
+      ).toBe(true);
       expect(
         BoatAttackIntentSchema.safeParse({
           type: "boat",
@@ -150,14 +150,14 @@ describe("IntentSchemaHardening", () => {
       ).toBe(true);
     });
 
-    it("rejects fractional or negative gold", () => {
+    it("accepts fractional gold but rejects negative gold", () => {
       expect(
         DonateGoldIntentSchema.safeParse({
           type: "donate_gold",
           recipient: "abc12345",
           gold: 100.5,
         }).success,
-      ).toBe(false);
+      ).toBe(true);
       expect(
         DonateGoldIntentSchema.safeParse({
           type: "donate_gold",
@@ -186,14 +186,14 @@ describe("IntentSchemaHardening", () => {
       ).toBe(true);
     });
 
-    it("rejects fractional or negative troops", () => {
+    it("accepts fractional troops but rejects negative troops", () => {
       expect(
         DonateTroopIntentSchema.safeParse({
           type: "donate_troops",
           recipient: "abc12345",
           troops: 10.2,
         }).success,
-      ).toBe(false);
+      ).toBe(true);
       expect(
         DonateTroopIntentSchema.safeParse({
           type: "donate_troops",

@@ -345,6 +345,11 @@ export const ID = z.string().regex(GAME_ID_REGEX);
 
 export const AllPlayersStatsSchema = z.record(ID, PlayerStatsSchema);
 
+const SafeNonNegativeNumberSchema = z
+  .number()
+  .nonnegative()
+  .max(Number.MAX_SAFE_INTEGER);
+
 export const QuickChatKeySchema = z.enum(
   Object.entries(quickChatData).flatMap(([category, entries]) =>
     entries.map((entry) => `${category}.${entry.key}`),
@@ -363,7 +368,7 @@ export const AllianceExtensionIntentSchema = z.object({
 export const AttackIntentSchema = z.object({
   type: z.literal("attack"),
   targetID: ID.nullable(),
-  troops: z.number().safe().int().nonnegative().nullable(),
+  troops: SafeNonNegativeNumberSchema.nullable(),
 });
 
 export const SpawnIntentSchema = z.object({
@@ -373,7 +378,7 @@ export const SpawnIntentSchema = z.object({
 
 export const BoatAttackIntentSchema = z.object({
   type: z.literal("boat"),
-  troops: z.number().safe().int().nonnegative(),
+  troops: SafeNonNegativeNumberSchema,
   dst: z.number().safe().int().nonnegative(),
 });
 
@@ -417,13 +422,13 @@ export const EmbargoAllIntentSchema = z.object({
 export const DonateGoldIntentSchema = z.object({
   type: z.literal("donate_gold"),
   recipient: ID,
-  gold: z.number().safe().int().nonnegative().nullable(),
+  gold: SafeNonNegativeNumberSchema.nullable(),
 });
 
 export const DonateTroopIntentSchema = z.object({
   type: z.literal("donate_troops"),
   recipient: ID,
-  troops: z.number().safe().int().nonnegative().nullable(),
+  troops: SafeNonNegativeNumberSchema.nullable(),
 });
 
 export const BuildUnitIntentSchema = z.object({
